@@ -1,0 +1,15 @@
+reg_module
+{
+	name = "diag_stub",
+	cc_sorce = {"diag_stub.c"},
+
+	meta = "diag",
+}
+
+reg_module
+{
+	name = "diag_impl",
+	cc_sorce = {"diag_impl.c"},
+
+	meta = "diag",
+}

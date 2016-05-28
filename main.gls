@@ -1,0 +1,12 @@
+reg_module{
+	meta = "metamain",
+	name = "main",
+	cpp_source = {"main.cpp"}
+}
+
+
+reg_module{
+	name = "here"
+}
+
+--glmach.mod_print("here")
