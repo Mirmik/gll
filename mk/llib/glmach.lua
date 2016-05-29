@@ -12,6 +12,7 @@ modfields = {
 {field = "s_source", tp = "strarray", default = {}}, 
 {field = "opts", tp = "string", default = ""},
 {field = "meta", tp = "string", default = nil},
+{field = "opts", tp = "strarray", default = {}}
 --{field = "compile", tp = "string", default = "check", variant = {"always", "check", "static"}},
 }
 

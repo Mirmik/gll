@@ -1,12 +1,13 @@
 reg_module{
 	meta = "metamain",
 	name = "main",
-	cpp_source = {"main.cpp"}
+	cpp_source = {"main.cpp"},
+	opts = {"rxbuffer_size", "txbuffer_size"},
+	defines = {"-DSERIAL_RX_BUFFER_SIZE=$0", "-DSERIAL_TX_BUFFER_SIZE=$1"},
 }
 
 
 reg_module{
-	name = "here"
+	name = "here",
 }
 
---glmach.mod_print("here")

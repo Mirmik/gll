@@ -1,32 +1,42 @@
 #!/usr/bin/lua
 
 dofile("./mk/llib/tableops.lua")
+dofile("./mk/llib/strops.lua")
 dofile("./mk/llib/pathops.lua")
 dofile("./mk/llib/glmach.lua")
+dofile("./mk/llib/mkops.lua")
+dofile("./mk/llib/colorizing.lua")
 
-paths.mkdir("build");
-paths.mkdir_list_relative({"main", "lib"}, "build");
+--print(string.tblgsub("piter parker",{"piter","parker"},{"tony","stark"}))
 
-local glltable = paths.find("*.gll","./")
-print(table.tostring(glltable))
-for i = 1, #glltable do
-	glmach.dofile(glltable[i])
-end  
+paths.mkdir("build")
+
+Variables = {
+	CC = "gcc",
+	CXX = "g++",
+	LD = "g++",
+	AR = "ar",
+	INCLUDE = "-I./src/include",
+	DEFINE = "-DGENOS=1989",
+	CCFLAG = "",
+	CXXFLAG = "",
+	LDFLAG = "",
+}
+
+RulePrototypes = {
+	s_rule = "{CC} #src -c -o #tgt {INCLUDE} {DEFINE} {CCFLAG}",
+	cc_rule = "{CC} #src -c -o #tgt {INCLUDE} {DEFINE} {CCFLAG}",
+	cxx_rule = "{CXX} #src -c -o #tgt {INCLUDE} {DEFINE} {CXXFLAG}",
+	ld_rule = "{LD} #src -Wl,--start-group #tgt -Wl,--end-group {LDFLAG}",
+	ar_rule = "{AR} rc #tgt #src" 
+}
+
+rule = mk.rule_build(Variables, RulePrototypes.cxx_rule)
+ldrule = mk.rule_build(Variables, RulePrototypes.ld_rule)
+
+srclst = {"main.cpp", "list.cpp"}
+tgtlst = {"build/main.o", "build/list.o"}
+
+mk.use_rule_on_list(rule, srclst, tgtlst)
 
 
-glmach.print_modnames()
-
-glmach.print_implementations("diag")
-
---table.save(glmach.mtable.modules, ".moduletable")
---tbl2 = table.load(".moduletable")
---print(table.tostring(paths.split("/lalala/jjj/k")))
---print(paths.reduce("/../jjj/k"))
-
---print(paths.reduce("fsdfak/gregwerg"))
-
---print(table.tostring(paths.split("lalala/jjj/k/")))
---print(table.tostring(paths.split("lalala/jjj/k/l.cpp")))
---print(paths.relative("lalala/jjj/k/", "lalala/jjj/k/l.cpp"))
-
---glmach.mod_print("main")
