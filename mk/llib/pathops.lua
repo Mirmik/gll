@@ -54,11 +54,6 @@ function paths.lreduce(path)
 	    	i = i + 1
 		end
 	end
-	
-	--local lst = #path
-	--if path[lst]:match('[^/]+/') then
-	--   path[lst] = path[lst]:match('[^/]+')
-	--end
 	return path
 end
 
@@ -102,6 +97,7 @@ function paths.exists(filename)
    return false
 end
 
+--[[
 function paths.absdir(path)
    if not path:match('^/') then
       path = paths.cwd() .. '/' .. path
@@ -117,6 +113,19 @@ function paths.reldir(path)
    table.remove(path)
    path = paths.reduce(path)
    return table.concat(path)
+end
+--]]
+
+function paths.absdir(path)
+  local lpath = paths.abslist(paths.split(path))
+  table.remove(lpath,#lpath)
+  return paths.unsplit(lpath) 
+end
+
+function paths.reldir(path)
+  local lpath = paths.split(path)
+  table.remove(lpath,#lpath)
+  return paths.unsplit(lpath) 
 end
 
 function paths.cwd()
@@ -172,6 +181,30 @@ end
 function paths.find(templ,root)
 	local tbl = string.split(os.capture(string.format('find %s -name "%s"', root, templ),true))
 	return tbl
+end
+
+function paths.changeexp(str, exp)
+  local nstr = str:gsub("%w+$", exp)
+  return nstr
+end
+
+function paths.list_add_prefix(list, prefix)
+  local outlist = {}
+  if (prefix == "") or (prefix == nil) then
+    return table.shallowcopy(list)
+  end
+  for i = 1, #list do
+    table.insert(outlist, paths.reduce(prefix .. "/" .. list[i]))
+  end
+  return outlist
+end
+
+function paths.list_changeexp(list, exp)
+  local outlist = {}
+  for i = 1, #list do
+    table.insert(outlist, paths.changeexp(list[i],exp))
+  end
+  return outlist
 end
 
 --return paths

@@ -27,7 +27,7 @@ RulePrototypes = {
 	s_rule = "{CC} #src -c -o #tgt {INCLUDE} {DEFINE} {CCFLAG}",
 	cc_rule = "{CC} #src -c -o #tgt {INCLUDE} {DEFINE} {CCFLAG}",
 	cxx_rule = "{CXX} #src -c -o #tgt {INCLUDE} {DEFINE} {CXXFLAG}",
-	ld_rule = "{LD} #src -Wl,--start-group #tgt -Wl,--end-group {LDFLAG}",
+	ld_rule = "{LD} -o #tgt -Wl,--start-group #src -Wl,--end-group {LDFLAG}",
 	ar_rule = "{AR} rc #tgt #src" 
 }
 
@@ -35,8 +35,8 @@ rule = mk.rule_build(Variables, RulePrototypes.cxx_rule)
 ldrule = mk.rule_build(Variables, RulePrototypes.ld_rule)
 
 srclst = {"main.cpp", "list.cpp"}
-tgtlst = {"build/main.o", "build/list.o"}
 
-mk.use_rule_on_list(rule, srclst, tgtlst)
+sl, tl = mk.prepare_srctgt_lists(srclst,"o",".","build")
+mk.use_rule_list(rule, sl, tl)
 
-
+mk.use_rule_simple(ldrule, string.concat_from_list(tl, " "), "genos")

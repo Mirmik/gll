@@ -19,3 +19,12 @@ function  string.tblgsub(str,ptbl,ntbl)
 	end
 	return lstr
 end
+
+function string.concat_from_list(list,div)
+   local str = ""
+   for i = 1, #list - 1 do
+      str = str .. list[i] .. div
+   end
+   str = str .. list[#list]
+   return str
+end

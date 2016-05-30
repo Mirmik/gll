@@ -12,7 +12,7 @@ function mk.rule_build(container, prototype)
 	return str
 end
 
-function mk.use_rule(rule,src,tgt)
+function mk.use_rule_simple(rule,src,tgt)
 	local instr = rule
 	instr = string.tblgsub(instr,{"#src","#tgt"},{src,tgt})
 	print(instr)
@@ -22,13 +22,19 @@ function mk.use_rule(rule,src,tgt)
 	end
 end
 
-function mk.use_rule_on_list(rule,src,tgt)
+function mk.use_rule_list(rule,src,tgt)
 	assert(#src == #tgt)
 	for i = 1, #src do
-		mk.use_rule(rule,src[i],tgt[i])
+		mk.use_rule_simple(rule,src[i],tgt[i])
 	end
 end
 
+function mk.prepare_srctgt_lists(list, tgtexp, srcprefix, tgtprefix)
+	local _tgtlist = paths.list_changeexp(list,tgtexp)
+	local srclist = paths.list_add_prefix(list,srcprefix)
+	local tgtlist = paths.list_add_prefix(_tgtlist,tgtprefix)
+	return srclist, tgtlist
+end
 
 function mk.build_module(mod,ruls,vars) 
 
